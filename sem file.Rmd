@@ -1,0 +1,51 @@
+---
+title: "SEM"
+author: "Bharad"
+date: "February 20, 2020"
+output:
+  html_document: default
+  pdf_document: default
+source: http://lavaan.ugent.be/tutorial/before.html
+---
+
+#loading libraries
+```{r}
+library(lavaan)
+```
+
+Now the library is loaded, lets start with loading the data. For sample, we are going to use political democracy data
+```{r}
+data=PoliticalDemocracy
+```
+
+Lets see how the data looks
+```{r}
+head(data)
+```
+
+Now we have the data, lets start structuring the model
+```{r}
+model <- '  # measurement model
+ind60 =~ x1 + x2 + x3
+dem60 =~ y1 + y2 + y3 + y4
+dem65 =~ y5 + y6 + y7 + y8
+# regressions
+dem60 ~ ind60
+dem65 ~ ind60 + dem60
+# residual correlations
+y1 ~~ y5
+y2 ~~ y4 + y6
+y3 ~~ y7
+y4 ~~ y8
+y6 ~~ y8
+'
+```
+
+Now the model is structured, lets start fitting the model and summarizing the results
+```{r}
+fit <- sem(model, data=PoliticalDemocracy)
+summary(fit, standardized=TRUE)
+```
+
+
+
